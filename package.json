@@ -1,0 +1,49 @@
+{
+  "name": "express-mvcx",
+  "version": "1.0.4",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./dist/server.js",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "dev": "nodemon ./dist/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kuldeep-Rathod/express-mvcx.git"
+  },
+  "homepage": "https://github.com/Kuldeep-Rathod/express-mvcx#readme",
+  "keywords": [
+    "express",
+    "mvc",
+    "express-mvc",
+    "backend",
+    "node",
+    "folder-structure",
+    "express-structure"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "bin": {
+    "express-mvcx": "./install.js"
+  },
+  "dependencies": {
+    "@types/express": "^5.0.0",
+    "@types/mongoose": "^5.11.96",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.12.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/jsonwebtoken": "^9.0.9"
+  }
+}
