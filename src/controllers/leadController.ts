@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import Lead from "../models/leadModel.js";
+import { AuthRequest } from "../middlewares/authorizeMiddleware.js";
+import mongoose from "mongoose";
 
 // Create Lead
 export const createLead = asyncHandler(async (req: Request, res: Response) => {
@@ -24,6 +26,24 @@ export const getLeads = asyncHandler(async (req: Request, res: Response) => {
     const leads = await Lead.find().populate("assignedTo", "name email");
     res.status(200).json(leads);
 });
+
+// Get User Leads
+export const getUserLeads = asyncHandler(
+    async (req: AuthRequest, res: Response) => {
+        const userId = req.user?._id;
+
+        if (!userId) {
+            res.status(401);
+            throw new Error("User not authenticated");
+        }
+
+        const leads = await Lead.find({
+            assignedTo: new mongoose.Types.ObjectId(userId),
+        }).populate("assignedTo", "name email");
+
+        res.status(200).json(leads);
+    }
+);
 
 // Get Lead by ID
 export const getLeadById = asyncHandler(async (req: Request, res: Response) => {

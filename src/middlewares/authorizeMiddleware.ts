@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
     user?: {
-        id: string;
+        _id: string;
         role: string;
         email: string;
     };
