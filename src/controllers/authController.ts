@@ -1,12 +1,12 @@
 import bcrypt from "bcryptjs";
 import { NextFunction, Request, Response } from "express";
 import asyncHandler from "express-async-handler";
-import Employee, { IEmployee } from "../models/employeeModel.js";
+import User, { IUser } from "../models/userModel.js";
 import { sendCookie } from "../utils/features.js";
 
 // Define custom request type to include user property
 interface AuthRequest extends Request {
-    user?: IEmployee; // Now properly typed
+    user?: IUser; // Now properly typed
 }
 
 // Register User
@@ -20,7 +20,7 @@ export const registerUser = asyncHandler(
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user: IEmployee = await Employee.create({
+        const user: IUser = await User.create({
             name,
             email,
             password: hashedPassword, // Store hashed password
@@ -36,7 +36,7 @@ export const loginUser = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
         const { email, password } = req.body;
 
-        const user = await Employee.findOne({ email }).select("+password");
+        const user = await User.findOne({ email }).select("+password");
         if (!user || !user.password) {
             res.status(400).json({ error: "Invalid credentials" });
             return;

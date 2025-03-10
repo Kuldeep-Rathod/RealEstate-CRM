@@ -1,16 +1,16 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-// Employee Interface
-export interface IEmployee extends Document {
+// User Interface
+export interface IUser extends Document {
     name: string;
     email: string;
     password: string;
-    role: "admin" | "agent" | "manager";
+    role: "admin" | "agent";
     createdAt: Date;
 }
 
-// Employee Schema
-const EmployeeSchema = new Schema<IEmployee>({
+// User Schema
+const UserSchema = new Schema<IUser>({
     name: {
         type: String,
         required: true,
@@ -37,7 +37,7 @@ const EmployeeSchema = new Schema<IEmployee>({
     },
 });
 
-// Employee Model
-const Employee = mongoose.model<IEmployee>("Employee", EmployeeSchema);
+// User Model
+const User = mongoose.model<IUser>("User", UserSchema);
 
-export default Employee;
+export default User;

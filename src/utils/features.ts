@@ -1,16 +1,20 @@
 import jwt from "jsonwebtoken";
 import { Response } from "express";
 import { jwtSecret } from "../config/env.js";
-import { IEmployee } from "../models/employeeModel.js"; // Ensure correct path
+import { IUser } from "../models/userModel.js"; // Ensure correct path
 
 export const sendCookie = (
-    user: IEmployee,
+    user: IUser,
     res: Response,
     message: string,
     statusCode: number = 200
 ): void => {
     const token = jwt.sign(
-        { _id: String((user as IEmployee)._id) },
+        {
+            _id: String((user as IUser)._id),
+            role: user.role,
+            email: user.email,
+        },
         jwtSecret,
         {
             expiresIn: "10m",

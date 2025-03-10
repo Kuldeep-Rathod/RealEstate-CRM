@@ -4,7 +4,7 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import errorHandler from "./middlewares/errorHandler.js";
-import employeeRoutes from "./routes/employeeRoutes.js";
+import UserRoutes from "./routes/userRoutes.js";
 import leadRoutes from "./routes/leadRoutes.js";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 import xss from "xss-clean";
@@ -22,7 +22,7 @@ app.use(ExpressMongoSanitize());
 app.use(xss());
 
 // Routes
-app.use("/api/v1/employees", employeeRoutes); // User routes
+app.use("/api/v1/Users", UserRoutes); // User routes
 app.use("/api/v1/leads", leadRoutes);
 app.use("/api/v1/auth", authRoutes);
 

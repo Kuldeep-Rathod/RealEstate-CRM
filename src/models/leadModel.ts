@@ -34,7 +34,7 @@ const LeadSchema = new Schema<ILead>({
     },
     assignedTo: {
         type: Schema.Types.ObjectId,
-        ref: "Employee",
+        ref: "User",
         required: true,
     },
     notes: { type: String },

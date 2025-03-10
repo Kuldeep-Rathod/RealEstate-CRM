@@ -64,12 +64,12 @@ npm run watch
 - **POST /api/v1/auth/login** - Login user
 - **POST /api/v1/auth/logout** - Logout user
 
-### Employee
+### User
 
-- **GET api/v1/employees/:id** - Get user profile (protected)
-- **PUT api/v1/employees/:id** - Update user profile (protected)
-- **GET api/v1/employees** - Get all users (protected)
-- **DELETE api/v1/employees/:id** - Delete user (protected)
+- **GET api/v1/users/:id** - Get user profile (protected)
+- **PUT api/v1/users/:id** - Update user profile (protected)
+- **GET api/v1/users** - Get all users (protected)
+- **DELETE api/v1/users/:id** - Delete user (protected)
 
 ### Leads
 
