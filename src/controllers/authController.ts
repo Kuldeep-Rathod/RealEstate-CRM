@@ -12,11 +12,17 @@ interface AuthRequest extends Request {
 // Register User
 export const registerUser = asyncHandler(
     async (req: Request, res: Response) => {
-        const { name, email, password, role } = req.body;
+        const { name, email, password, confirmPassword, role } = req.body;
+        const photo = req.file;
 
         if (!name || !email || !password) {
             res.status(400);
             throw new Error("Please provide all required fields.");
+        }
+
+        if (password !== confirmPassword) {
+            res.status(400);
+            throw new Error("Passwords do not match");
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -25,6 +31,7 @@ export const registerUser = asyncHandler(
             email,
             password: hashedPassword, // Store hashed password
             role,
+            photo: photo?.path,
         });
 
         sendCookie(user, res, `Welcome, ${user.name}`, 201);

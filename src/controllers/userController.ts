@@ -5,7 +5,8 @@ import bcrypt from "bcryptjs";
 
 // Create User
 export const createUser = asyncHandler(async (req: Request, res: Response) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, confirmPassword, role } = req.body;
+    const photo = req.file;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -13,8 +14,20 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
         throw new Error("User already exists");
     }
 
+    if (password !== confirmPassword) {
+        res.status(400);
+        throw new Error("Passwords do not match");
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hashedPassword, role });
+
+    const newUser = new User({
+        name,
+        email,
+        password: hashedPassword,
+        role,
+        photo: photo?.path,
+    });
     await newUser.save();
 
     res.status(201).json({
@@ -41,13 +54,26 @@ export const getUserById = asyncHandler(async (req: Request, res: Response) => {
 
 // Update User
 export const updateUser = asyncHandler(async (req: Request, res: Response) => {
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-    });
-    if (!updatedUser) {
+
+    if (req.body.password || req.body.confirmPassword) {
+        res.status(400);
+        throw new Error("For updating password, use updatePassword endpoint");
+    }
+
+    const user = await User.findById(req.params.id);
+    if (!user) {
         res.status(404);
         throw new Error("User not found");
     }
+
+    if (req.file) {
+        req.body.photo = req.file.path;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+    });
+
     res.status(200).json({
         message: "User updated successfully",
         updatedUser,

@@ -8,7 +8,7 @@ import {
     getUserLeads,
 } from "../controllers/leadController.js";
 import { authenticate } from "../middlewares/authMiddleware.js";
-import { authorize } from "../middlewares/authorizeMiddleware.js";
+
 
 const router = express.Router();
 

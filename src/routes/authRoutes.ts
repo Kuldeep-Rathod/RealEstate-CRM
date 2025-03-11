@@ -4,10 +4,11 @@ import {
     logoutUser,
     registerUser,
 } from "../controllers/authController.js";
+import { singleUpload } from "../middlewares/multerMiddleware.js";
 
 const router = express.Router();
 
-router.post("/register", registerUser);
+router.post("/register", singleUpload, registerUser);
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 
