@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 // Lead Interface
-interface ILead extends Document {
+export interface ILead extends Document {
     name: string;
     email?: string;
     phone: string;
@@ -29,7 +29,7 @@ const LeadSchema = new Schema<ILead>({
     },
     status: {
         type: String,
-        enum: ["new", "contacted", "interested", "converted", "not interested"],
+        enum: ["new", "hot", "cold", "warm"],
         default: "new",
     },
     assignedTo: {
