@@ -3,6 +3,9 @@ import { NextFunction, Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import User, { IUser } from "../models/userModel.js";
 import { sendCookie } from "../utils/features.js";
+import sendMail from "../utils/sendMail.js";
+import { smtpUser } from "../config/env.js";
+import { mailTemplate } from "../utils/mailTemplate.js";
 
 // Define custom request type to include user property
 interface AuthRequest extends Request {
@@ -33,6 +36,14 @@ export const registerUser = asyncHandler(
             role,
             photo: photo?.path,
         });
+
+        sendMail(
+            smtpUser ?? "hello",
+            email,
+            "Welcome to Lead Management System",
+            '',
+            mailTemplate(user.name, "Lead Management System")
+        );
 
         sendCookie(user, res, `Welcome, ${user.name}`, 201);
     }
