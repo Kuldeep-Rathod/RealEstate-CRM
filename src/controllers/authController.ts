@@ -3,7 +3,8 @@ import { NextFunction, Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import User, { IUser } from "../models/userModel.js";
 import { sendCookie } from "../utils/features.js";
-import { sendWelcomeEmail } from "../utils/sendMail.js";
+import sendMail from "../utils/sendMail.js";
+import { mailTemplate } from "../utils/mailTemplate.js";
 
 
 // Define custom request type to include user property
@@ -36,14 +37,12 @@ export const registerUser = asyncHandler(
             photo: photo?.path,
         });
         
-        // sendMail(
-        //     email,
-        //     "Welcome to Lead Management System",
-        //     '',
-        //     mailTemplate(user.name, "Lead Management System")
-        // );
-
-        sendWelcomeEmail(email, user.name);
+        sendMail(
+            email,
+            "Welcome to Lead Management System",
+            '',
+            mailTemplate(user.name, "Lead Management System")
+        );
 
         sendCookie(user, res, `Welcome, ${user.name}`, 201);
     }
