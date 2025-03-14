@@ -6,12 +6,13 @@ import mongoose from "mongoose";
 
 // Create Lead
 export const createLead = asyncHandler(async (req: Request, res: Response) => {
-    const { name, email, phone, status, assignedTo, notes } = req.body;
+    const { name, email, phone, company, status, assignedTo, notes } = req.body;
 
     const newLead = new Lead({
         name,
         email,
         phone,
+        company,
         status,
         assignedTo,
         notes,

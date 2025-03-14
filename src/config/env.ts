@@ -12,6 +12,3 @@ export const smtpUser = process.env.SMTP_USER;
 export const smtpPass = process.env.SMTP_PASS;
 export const smtpHost = process.env.SMTP_HOST;
 export const smtpPort = process.env.SMTP_PORT;
-export const mailtrapApiToken = process.env.MAILTRAP_API_TOKEN as string;
-export const mailtrapSender = process.env.MAILTRAP_SENDER as string;
-export const mailtrapEndpoint = process.env.MAILTRAP_ENDPOINT as string;

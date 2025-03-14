@@ -14,13 +14,13 @@ import { uploadCSV } from "../controllers/csvController.js";
 const router = express.Router();
 
 router.post("/", authenticate, createLead); // Create new lead
-router.get("/", authenticate, getLeads); // Get all leads
+router.get("/", getLeads); // Get all leads
 router.get("/userLeads", authenticate, getUserLeads); // Get user leads
 
 router.post("/uploadFile", authenticate, singleCSVUpload, uploadCSV);
 
 router.get("/:id", authenticate, getLeadById); // Get lead by ID
-router.put("/:id", authenticate, updateLead); // Update lead
+router.put("/:id", updateLead); // Update lead
 router.delete("/:id", authenticate, deleteLead); // Delete lead
 
 export default router;
