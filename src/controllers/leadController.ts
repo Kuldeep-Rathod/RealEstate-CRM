@@ -6,7 +6,13 @@ import mongoose from "mongoose";
 
 // Create Lead
 export const createLead = asyncHandler(async (req: Request, res: Response) => {
-    const { name, email, phone, company, status, assignedTo, notes } = req.body;
+    let { name, email, phone, company, status, assignedTo, notes } = req.body;
+
+    if (phone.startsWith("91") && phone.length > 10) {
+        phone = `+${phone}`; // Add "+" if 91 exists and length > 10
+    } else if (!phone.startsWith("+91")) {
+        phone = `+91${phone}`; // Prepend "+91" if missing
+    }
 
     const newLead = new Lead({
         name,
