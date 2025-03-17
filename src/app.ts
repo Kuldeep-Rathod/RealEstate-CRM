@@ -8,6 +8,7 @@ import UserRoutes from "./routes/userRoutes.js";
 import leadRoutes from "./routes/leadRoutes.js";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 import xss from "xss-clean";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 connectDB(); // Connect to database
@@ -15,7 +16,13 @@ connectDB(); // Connect to database
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+    cors({
+        origin: process.env.CLIENT_URL || "http://localhost:5173",
+        credentials: true,
+    })
+);
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true })); // Parses form data
 app.use(express.json()); // Parse JSON requests
 app.use(ExpressMongoSanitize());
