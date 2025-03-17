@@ -8,7 +8,7 @@ import { mailTemplate } from "../utils/mailTemplate.js";
 
 
 // Define custom request type to include user property
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
     user?: IUser; // Now properly typed
 }
 

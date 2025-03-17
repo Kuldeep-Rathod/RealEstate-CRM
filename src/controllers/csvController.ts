@@ -7,6 +7,7 @@ import asyncHandler from "express-async-handler";
 // Define a custom request interface to extend Express's Request
 interface MulterRequest extends Request {
     file?: Express.Multer.File;
+    user?: { _id: string };
 }
 
 // Update function to use MulterRequest instead of default Request
@@ -16,11 +17,23 @@ export const uploadCSV = asyncHandler(
             throw new Error("No CSV file uploaded"); // Let asyncHandler handle the error
         }
 
+        // console.log("Received User in Controller:", req.user); // ✅ Debugging
+
+        if (!req.user || !req.user._id) {
+            throw new Error("User not authenticated"); // Ensure the user is available
+        }
+
         const results: Partial<ILead>[] = [];
+        const currentUserId = req.user._id; // Get the logged-in user’s ID
 
         fs.createReadStream(req.file.path)
             .pipe(csv())
-            .on("data", (data) => results.push(data))
+            .on("data", (data) => {
+                results.push({
+                    ...data,
+                    assignedTo: currentUserId, // Set assignedTo to current user ID
+                });
+            })
             .on("end", async () => {
                 try {
                     await Lead.insertMany(results);

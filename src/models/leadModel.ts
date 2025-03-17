@@ -7,7 +7,7 @@ export interface ILead extends Document {
     phone: string;
     company?: string;
     status: "new" | "hot" | "cold" | "warm";
-    assignedTo: mongoose.Schema.Types.ObjectId;
+    assignedTo?: mongoose.Schema.Types.ObjectId;
     notes?: string;
     createdAt: Date;
 }
@@ -21,7 +21,7 @@ const LeadSchema = new Schema<ILead>({
     },
     email: {
         type: String,
-        unique: true,
+        // unique: true,
         lowercase: true,
     },
     phone: {
@@ -39,7 +39,6 @@ const LeadSchema = new Schema<ILead>({
     assignedTo: {
         type: Schema.Types.ObjectId,
         ref: "User",
-        required: true,
     },
     notes: { type: String },
     createdAt: {

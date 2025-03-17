@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 interface JwtPayload {
-    id: string;
+    _id: string;
     role: string;
     email: string;
 }
@@ -16,6 +16,8 @@ export function authenticate(
     res: Response,
     next: NextFunction
 ): void {
+    // console.log("Incoming Headers:", req.headers); // Debug incoming headers
+
     const authHeader = req.header("Authorization");
 
     if (!authHeader) {
@@ -39,7 +41,16 @@ export function authenticate(
 
         // console.log("Decoded Token:", verified); // 🔹 Debugging
 
+        if (!verified._id) {
+            // Change `id` to `_id`
+            res.status(401).json({ error: "Invalid Token. No user ID found." });
+            return;
+        }
+
         req.user = verified;
+
+        // console.log("Assigned User to Request:", req.user); // ✅ Debugging
+
         next(); // ✅ Always call next() when successful
     } catch (err) {
         res.status(400).json({ error: "Invalid Token" });
