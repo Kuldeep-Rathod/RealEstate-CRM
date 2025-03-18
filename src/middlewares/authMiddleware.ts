@@ -18,7 +18,7 @@ export function authenticate(
 ): void {
     // console.log("Incoming Headers:", req.headers); // Debug incoming headers
 
-    const authHeader = req.header("Authorization");
+    const authHeader = req.get("Authorization"); // ✅ Use `get()` instead of `header()`
 
     if (!authHeader) {
         res.status(401).json({ error: "Access Denied" });
@@ -42,7 +42,6 @@ export function authenticate(
         // console.log("Decoded Token:", verified); // 🔹 Debugging
 
         if (!verified._id) {
-            // Change `id` to `_id`
             res.status(401).json({ error: "Invalid Token. No user ID found." });
             return;
         }
