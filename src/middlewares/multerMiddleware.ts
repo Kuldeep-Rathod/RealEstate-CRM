@@ -1,7 +1,6 @@
-import multer, { FileFilterCallback } from "multer";
+import multer from "multer";
 import { v4 as uuid } from "uuid";
 import path from "path";
-import { Request } from "express";
 
 // File storage logic
 const storage = multer.diskStorage({
@@ -21,11 +20,7 @@ const storage = multer.diskStorage({
 });
 
 // File filter to allow only specific file types
-const fileFilter = (
-    req: Request,
-    file: Express.Multer.File,
-    callback: FileFilterCallback
-) => {
+const fileFilter = (req: Express.Request, file: Express.Multer.File, callback: multer.FileFilterCallback) => {
     if (file.mimetype === "text/csv" || file.mimetype.startsWith("image/")) {
         callback(null, true);
     } else {

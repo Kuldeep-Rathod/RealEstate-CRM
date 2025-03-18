@@ -1,11 +1,11 @@
-import express, { Request, Response } from "express"; // ✅ Import Express properly
+import { Request, Response } from "express";
 import fs from "fs";
 import csv from "csv-parser";
 import Lead, { ILead } from "../models/leadModel.js";
 import asyncHandler from "express-async-handler";
 
 // Define a custom request interface to extend Express's Request
-interface MulterRequest extends express.Request { // ✅ Use express.Request
+interface MulterRequest extends Request {
     file?: Express.Multer.File;
     user?: { _id: string };
 }
