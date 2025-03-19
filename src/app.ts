@@ -18,8 +18,8 @@ const app = express();
 // Middleware
 app.use(
     cors({
-        origin: process.env.CLIENT_URL || "http://localhost:5173",
-        credentials: true,
+        origin: "*", // Allows all origins
+        credentials: true, // Allows cookies, authentication headers, etc.
     })
 );
 app.use(cookieParser());
@@ -29,6 +29,10 @@ app.use(ExpressMongoSanitize());
 app.use(xss());
 
 // Routes
+app.use("/api/v1", (req, res, next) => {
+    res.status(200).json({ message: "Welcome to RealEstate-CRM API" });
+    next(); // Call the next middleware function
+});
 app.use("/api/v1/Users", UserRoutes); // User routes
 app.use("/api/v1/leads", leadRoutes);
 app.use("/api/v1/auth", authRoutes);
