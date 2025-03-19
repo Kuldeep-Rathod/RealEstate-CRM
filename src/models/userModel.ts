@@ -29,7 +29,7 @@ const UserSchema = new Schema<IUser>({
     },
     role: {
         type: String,
-        enum: ["admin", "agent", "manager"],
+        enum: ["admin", "agent"],
         default: "agent",
     },
     photo: {

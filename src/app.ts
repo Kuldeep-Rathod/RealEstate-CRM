@@ -15,7 +15,7 @@ connectDB(); // Connect to database
 
 const app = express();
 
-const allowedOrigins = ["https://real-estate-crm-frontend-alpha.vercel.app"];
+const allowedOrigins = ["https://real-estate-crm-frontend-alpha.vercel.app", "http://localhost:5173"];
 
 // Middleware
 app.use(
