@@ -15,11 +15,13 @@ connectDB(); // Connect to database
 
 const app = express();
 
+const allowedOrigins = ["https://real-estate-crm-frontend-alpha.vercel.app"];
+
 // Middleware
 app.use(
     cors({
-        origin: "*", // Allows all origins
-        credentials: true, // Allows cookies, authentication headers, etc.
+        origin: allowedOrigins,
+        credentials: true, // Allow credentials (cookies, authentication headers)
     })
 );
 app.use(cookieParser());
