@@ -29,13 +29,14 @@ app.use(ExpressMongoSanitize());
 app.use(xss());
 
 // Routes
+
+app.use("/api/v1/Users", UserRoutes); // User routes
+app.use("/api/v1/leads", leadRoutes);
+app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1", (req, res, next) => {
     res.status(200).json({ message: "Welcome to RealEstate-CRM API" });
     next(); // Call the next middleware function
 });
-app.use("/api/v1/Users", UserRoutes); // User routes
-app.use("/api/v1/leads", leadRoutes);
-app.use("/api/v1/auth", authRoutes);
 
 // Error Handling Middleware
 app.use(errorHandler);
