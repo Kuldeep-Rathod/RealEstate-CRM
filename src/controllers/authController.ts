@@ -12,9 +12,13 @@ export interface AuthRequest extends Request {
     user?: IUser; // Now properly typed
 }
 
+interface MulterRequest extends Request {
+    file?: Express.Multer.File;
+  }
+
 // Register User
 export const registerUser = asyncHandler(
-    async (req: Request, res: Response) => {
+    async (req: MulterRequest, res: Response) => {
         const { name, email, password, confirmPassword, role } = req.body;
         const photo = req.file;
 
