@@ -24,7 +24,9 @@ export const sendCookie = (
     res.status(statusCode)
         .cookie("token", token, {
             httpOnly: true,
-            maxAge: 10 * 60 * 1000, // 10 minutes
+            maxAge: 1 * 60 * 1000, // 8 hours
+            expires: new Date(Date.now() + 1 * 60 * 1000),
+            // maxAge: 8 * 60 * 60 * 1000, // 8 hours
             sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
             secure: process.env.NODE_ENV === "production",
         })

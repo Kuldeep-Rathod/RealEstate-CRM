@@ -39,6 +39,12 @@ export const getUserLeads = asyncHandler(
     async (req: AuthRequest, res: Response) => {
         const userId = req.user?._id;
 
+        if(req.user?.role === "admin") {
+            const leads = await Lead.find().populate("assignedTo", "name email");
+            res.status(200).json(leads);
+            return;
+        }
+
         if (!userId) {
             res.status(401);
             throw new Error("User not authenticated");

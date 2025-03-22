@@ -10,11 +10,12 @@ import {
 import { authenticate } from "../middlewares/authMiddleware.js";
 import { singleCSVUpload } from "../middlewares/multerMiddleware.js";
 import { uploadCSV } from "../controllers/csvController.js";
+import { authorize } from "../middlewares/authorizeMiddleware.js";
 
 const router = express.Router();
 
 router.post("/", authenticate, createLead); // Create new lead
-router.get("/", authenticate,  getLeads); // Get all leads
+router.get("/", authenticate, authorize(["admin"]),  getLeads); // Get all leads
 router.get("/userLeads", authenticate, getUserLeads); // Get user leads
 
 router.post("/uploadFile", authenticate, singleCSVUpload, uploadCSV);
