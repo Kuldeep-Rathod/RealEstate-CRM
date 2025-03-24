@@ -6,7 +6,6 @@ import { sendCookie } from "../utils/features.js";
 import sendMail from "../utils/sendMail.js";
 import { mailTemplate } from "../utils/mailTemplate.js";
 
-
 // Define custom request type to include user property
 export interface AuthRequest extends Request {
     user?: IUser; // Now properly typed
@@ -14,7 +13,7 @@ export interface AuthRequest extends Request {
 
 interface MulterRequest extends Request {
     file?: Express.Multer.File;
-  }
+}
 
 // Register User
 export const registerUser = asyncHandler(
@@ -33,24 +32,78 @@ export const registerUser = asyncHandler(
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Check if email already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            res.status(400);
+            throw new Error("User already exists");
+        }
+
+        //Generate OTP
+        const otp = Math.floor(1000 + Math.random() * 9000);
+        const hashedOTP = await bcrypt.hash(String(otp), 10);
+        console.log(otp);
+        console.log(hashedOTP);
+        const otpExpiry = new Date(Date.now() + 30 * 60 * 1000); // 10 minutes
+
         const user: IUser = await User.create({
             name,
             email,
-            password: hashedPassword, // Store hashed password
+            password: hashedPassword,
             role,
             photo: photo?.path,
+            otp: hashedOTP,
+            otpExpiry,
         });
-        
+
         sendMail(
             email,
-            "Welcome to Lead Management System",
-            '',
-            mailTemplate(user.name, "Lead Management System")
+            "OTP for Lead Management System",
+            ``,
+            // mailTemplate(user.name, "Lead Management System")
+            `Hello ${user.name},<br><br> Your OTP for Lead Management System is: ${otp}`
         );
 
-        sendCookie(user, res, `Welcome, ${user.name}`, 201);
+        res.status(200).json({ message: "Sent OTP to your email" });
     }
 );
+
+// Verify OTP
+export const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
+    const { email, otp } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+        res.status(400);
+        throw new Error("User not found");
+    }
+
+    if (!user.otp || !user.otpExpiry || user.otpExpiry < new Date()) {
+        res.status(400);
+        throw new Error("OTP has expired. Please request a new one.");
+    }
+
+    const isMatch = await bcrypt.compare(String(otp), user.otp);
+    if (!isMatch) {
+        res.status(400);
+        throw new Error("Invalid OTP");
+    }
+
+    user.isVerified = true;
+    user.otp = undefined;
+    user.otpExpiry = undefined;
+    await user.save();
+
+    // sendMail(
+    //     email,
+    //     "Welcome to Lead Management System",
+    //     "",
+    //     mailTemplate(user.name, "Lead Management System")
+    // );
+
+    sendCookie(user, res, `Welcome, ${user.name}`, 200);
+});
 
 // Login User
 export const loginUser = asyncHandler(
