@@ -9,30 +9,33 @@ export const sendCookie = (
     message: string,
     statusCode: number = 200
 ): void => {
-    const token = jwt.sign(
+    if (!jwtSecret) {
+        throw new Error("JWT secret is missing! Check environment variables.");
+    }
+
+    const authToken = jwt.sign(
         {
-            _id: String((user as IUser)._id),
+            _id: String(user._id),
             role: user.role,
             email: user.email,
         },
         jwtSecret,
         {
-            expiresIn: "10m",
+            expiresIn: "8h", // Match cookie expiry
         }
     );
 
     res.status(statusCode)
-        .cookie("token", token, {
+        .cookie("authToken", authToken, {
             httpOnly: true,
-            maxAge: 1 * 60 * 1000, // 8 hours
-            expires: new Date(Date.now() + 1 * 60 * 1000),
-            // maxAge: 8 * 60 * 60 * 1000, // 8 hours
-            sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+            maxAge: 8 * 60 * 60 * 1000, // 8 hours
+            expires: new Date(Date.now() + 8 * 60 * 60 * 1000),
+            sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
             secure: process.env.NODE_ENV === "production",
         })
         .json({
             success: true,
             message,
-            token,
+            authToken,
         });
 };

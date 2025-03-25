@@ -31,15 +31,15 @@ export function authenticate(
         return;
     }
 
-    const token = tokenParts[1];
+    const authToken = tokenParts[1];
 
     try {
         const verified = jwt.verify(
-            token,
+            authToken,
             process.env.JWT_SECRET as string
         ) as JwtPayload;
 
-        // console.log("Decoded Token:", verified); // 🔹 Debugging
+        // console.log("Decoded authToken:", verified); // 🔹 Debugging
 
         if (!verified._id) {
             // Change `id` to `_id`

@@ -43,8 +43,8 @@ export const registerUser = asyncHandler(
         //Generate OTP
         const otp = Math.floor(1000 + Math.random() * 9000);
         const hashedOTP = await bcrypt.hash(String(otp), 10);
-        console.log(otp);
-        console.log(hashedOTP);
+        // console.log(otp);
+        // console.log(hashedOTP);
         const otpExpiry = new Date(Date.now() + 30 * 60 * 1000); // 10 minutes
 
         const user: IUser = await User.create({
@@ -65,7 +65,8 @@ export const registerUser = asyncHandler(
             `Hello ${user.name},<br><br> Your OTP for Lead Management System is: ${otp}`
         );
 
-        res.status(200).json({ message: "Sent OTP to your email" });
+        sendCookie(user, res, `Welcome, ${user.name}`, 200);
+        // res.status(200).json({ message: "Sent OTP to your email" });
     }
 );
 
@@ -128,7 +129,7 @@ export const loginUser = asyncHandler(
 
 // Logout User
 export const logoutUser = (req: AuthRequest, res: Response): void => {
-    res.cookie("token", "", {
+    res.cookie("authToken", "", {
         httpOnly: true,
         expires: new Date(0), // Expire the cookie immediately
         sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
